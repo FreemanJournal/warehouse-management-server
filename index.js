@@ -69,7 +69,7 @@ async function runServer(){
 
         // get all the data
         app.get('/faq',async (req,res)=>{
-            const cursor = feedbackCollection.find({})
+            const cursor = faqCollection.find({})
             const items = await cursor.toArray();
             res.send(items)
         })
