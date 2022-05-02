@@ -41,9 +41,9 @@ async function runServer(){
             res.send(items)
         })
         // insert and update
-        app.post('/items',async (req,res)=>{
+        app.put('/items',async (req,res)=>{
             const item = req.body;
-            item._id && delete item._id;
+            // item._id && delete item._id;
             // create filter for an old product to update
             const filter = {productId:item.productId} ;
             // create a new item if no item is matched
@@ -53,6 +53,16 @@ async function runServer(){
                 $set:{...item}
             }
             const result = await productCollection.updateOne(filter,updateItem,options)
+            res.send(result)
+        })
+        // update quantity
+        app.put('/items/qtnUpdate',async (req,res)=>{
+            const {productQuantity,productId} = req.body;
+            // update a item
+            const updateItem = {
+                $set:{quantity:productQuantity}
+            }
+            const result = await productCollection.updateOne({productId},updateItem)
             res.send(result)
         })
 
