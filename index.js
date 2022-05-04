@@ -119,7 +119,6 @@ async function runServer() {
         app.get('/items-user', verifyAuthToken, async (req, res) => {
             const { email } = req.query
             const decodedEmail = req.decoded.email
-            console.log(decodedEmail, email);
             if (email !== decodedEmail) {
                 res.status(403).send({ message: "Forbidden Access" })
                 return;
@@ -128,9 +127,6 @@ async function runServer() {
             const items = await cursor.toArray();
             res.send(items)
         })
-
-
-
 
     } finally {
 
