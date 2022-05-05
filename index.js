@@ -46,6 +46,7 @@ async function runServer() {
         const productCollection = client.db("WarehouseManagement").collection("products");
         const feedbackCollection = client.db("WarehouseManagement").collection("feedbacks");
         const faqCollection = client.db("WarehouseManagement").collection("faq");
+        const blogCollection = client.db("WarehouseManagement").collection("blogs");
 
         // Product Api
 
@@ -108,6 +109,15 @@ async function runServer() {
             res.send(items)
         })
 
+        // Blog Api
+
+          // get all the products
+          app.get('/blogs', async (req, res) => {
+            const cursor = blogCollection.find({})
+            const blogs = await cursor.toArray();
+            res.send(blogs)
+        })
+
         // create token
         app.post("/createToken", async (req, res) => {
             const email = req.body
@@ -133,6 +143,5 @@ async function runServer() {
     }
 }
 runServer().catch(console.dir);
-// hello mom
 
 app.listen(port, console.log(`Server running on ${port}`))
