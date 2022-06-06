@@ -12,9 +12,7 @@ app.use(cors())
 app.use(express.json())
 
 
-app.get('/', (req, res) => {
-    res.send('The Green House is running....')
-})
+
 
 // connect with mongodb
 
@@ -56,6 +54,16 @@ async function runServer() {
             const items = await cursor.toArray();
             res.send(items)
         })
+
+        // get data by pagination
+        app.get('/items-by-page', async (req, res) => {
+            const { page, size } = req.query;
+            const cursor = productCollection.find({});
+            const count = await productCollection.estimatedDocumentCount();
+            const products = await cursor.skip((+page * +size)).limit(+size).toArray();
+            res.send({products,count})
+        })
+
 
 
         // insert and update products
@@ -111,8 +119,8 @@ async function runServer() {
 
         // Blog Api
 
-          // get all the products
-          app.get('/blogs', async (req, res) => {
+        // get all the products
+        app.get('/blogs', async (req, res) => {
             const cursor = blogCollection.find({})
             const blogs = await cursor.toArray();
             res.send(blogs)
@@ -143,5 +151,9 @@ async function runServer() {
     }
 }
 runServer().catch(console.dir);
+
+app.get('/', (req, res) => {
+    res.send('The Green House is running....')
+})
 
 app.listen(port, console.log(`Server running on ${port}`))
